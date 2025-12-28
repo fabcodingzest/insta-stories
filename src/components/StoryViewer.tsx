@@ -63,10 +63,12 @@ function StoryViewer({ users, startUserIndex, onClose }: StoryViewerProps) {
     if (currentStoryIndex > 0) {
       setCurrentStoryIndex((prev) => prev - 1);
       setProgress(0);
-    } else {
+    } else if (currentUserIndex > 0) {
       goToPrevUser();
+    } else {
+      onClose();
     }
-  }, [currentStoryIndex, goToPrevUser]);
+  }, [currentStoryIndex, currentUserIndex, goToPrevUser, onClose]);
 
   useEffect(() => {
     if (isLoading) return;
