@@ -77,6 +77,7 @@ function StoryViewer({ users, startUserIndex, onClose }: StoryViewerProps) {
         const next = prev + progressIncrement;
 
         if (next >= 100) {
+          clearInterval(interval);
           goToNextStory();
           return 100;
         }
