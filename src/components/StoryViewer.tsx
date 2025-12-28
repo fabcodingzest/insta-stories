@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { User } from "../constants/user";
 
 interface StoryViewerProps {
@@ -16,7 +16,6 @@ function StoryViewer({ users, startUserIndex, onClose }: StoryViewerProps) {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const progressRef = useRef(0);
 
   const currentUser = users[currentUserIndex];
   const currentStory = currentUser?.stories[currentStoryIndex];
@@ -74,20 +73,22 @@ function StoryViewer({ users, startUserIndex, onClose }: StoryViewerProps) {
     if (isLoading) return;
 
     const interval = setInterval(() => {
-      progressRef.current += progressIncrement;
-      setProgress(progressRef.current);
+      setProgress((prev) => {
+        const next = prev + progressIncrement;
 
-      if (progressRef.current >= 100) {
-        clearInterval(interval);
-        goToNextStory();
-      }
+        if (next >= 100) {
+          goToNextStory();
+          return 100;
+        }
+
+        return next;
+      });
     }, PROGRESS_INTERVAL);
 
     return () => clearInterval(interval);
   }, [isLoading, currentStoryIndex, currentUserIndex, goToNextStory]);
 
   useEffect(() => {
-    progressRef.current = 0;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgress(0);
     setIsLoading(true);
