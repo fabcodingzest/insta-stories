@@ -2,13 +2,14 @@ import type { User } from "../constants/user";
 
 interface StoryItemType {
   data: User;
-  openStories: () => void;
+  handleStoryClick: (clickedUserIndex: number) => void;
+  index: number;
 }
 
-function StoryItem({ data, openStories }: StoryItemType) {
+function StoryItem({ data, handleStoryClick, index }: StoryItemType) {
   const { stories, username, avatar } = data;
   return (
-    <div className="flex-col justify-center items-center" onClick={openStories}>
+    <div className="flex-col justify-center items-center" onClick={() => handleStoryClick(index)}>
       <div
         className={`rounded-full w-22 overflow-hidden flex justify-center items-center transition-all duration-200 ${
           stories.length > 0 ? "border-4 border-pink-800" : "border-4 border-gray-500"
